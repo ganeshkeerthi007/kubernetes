@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: k8s-ingress123
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: a1
+            port:
+              number: 80
+        path: /a1(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: a1
+            port:
+              number: 80
+        path: /b2(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: b2
+            port:
+              number: 80
+        path: /(.*)
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.30.83.221

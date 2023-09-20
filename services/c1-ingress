@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: c1-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /apple(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: a1
+            port:
+              number: 80
+      - path: /ball(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: b2
+            port :
+              number: 80
+              
