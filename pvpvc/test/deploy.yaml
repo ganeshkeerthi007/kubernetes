@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rep-with-pvc
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: test-volume
+          mountPath: /test
+      nodeSelector:
+       disktype: ssd    
+      volumes:
+      - name: test-volume
+        persistentVolumeClaim:
+          claimName: pvctest
+

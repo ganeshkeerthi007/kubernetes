@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngnix
+spec:
+  selector:
+    matchLabels:
+      app: ngnix
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: ngnix
+    spec:
+      containers:
+        - name: ngnix
+          image: nginx:latest
+          ports: 
+          - containerPort: 8080
+            name: ngnix
+          volumeMounts:
+          - name: data-volume
+            mountPath: /data
+            readOnly: true
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-volume
+  volumeClaimTemplates:
+    - metadata:
+        name: data-volume
+      spec:
+        storageClassName: gcp-storage-class
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi      

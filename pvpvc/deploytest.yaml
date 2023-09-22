@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: deploy-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: test-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: test-volume
+          mountPath: /test
+      volumes:
+      - name: test-volume
+        persistentVolumeClaim:
+          claimName: pvctes1
+      
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicetest
+spec:
+  type: LoadBalancer
+  selector: 
+    app: test
+  ports: 
+  - protocol: TCP
+    port : 80
